@@ -45,7 +45,6 @@ export default class Slideshow {
 		});
 
 		this.initEvents();
-		this.initAnimation();
 	}
 
 	initAnimation() {
@@ -53,20 +52,21 @@ export default class Slideshow {
 		const currentSlideInfo = this.slideInfos[this.current];
 		const delay = 0.25;
 
-		gsap.timeline({
-			defaults: { duration: 2, ease: "expo.inOut" },
-		})
+		const tl = gsap
+			.timeline({
+				defaults: { duration: 2, ease: "expo.inOut" },
+			})
 			.addLabel("start", delay)
-			.addLabel("upcoming", delay + 0.85)
+			.addLabel("upcoming", delay + 0.85);
 
-			.set([this.DOM.navigation.el, ".frame > *"], { opacity: 0, pointerEvents: "none" })
+		tl.set([this.DOM.navigation.el, ".frame > *"], { opacity: 0, pointerEvents: "none" })
 			.set(currentSlide.DOM.el, { pointerEvents: "none" })
 			.set([currentSlide.DOM.cards.left, currentSlide.DOM.cards.right], { translateX: 0, rotate: 0, opacity: 0 })
 			.set(currentSlide.DOM.cards.center, { translateY: -currentSlide.DOM.cards.center.clientHeight * 1.15 })
 			.set(currentSlide.DOM.cards.center.children[0], { translateY: currentSlide.DOM.cards.center.clientHeight * 1.15 })
-			.set(currentSlideInfo.DOM.text.title, { yPercent: 120 })
+			.set(currentSlideInfo.DOM.text.title, { yPercent: 120 });
 
-			.to([this.DOM.navigation.el, ".frame > *"], { duration: 2, opacity: 1, pointerEvents: "all" }, "start")
+		tl.to([this.DOM.navigation.el, ".frame > *"], { duration: 2, opacity: 1, pointerEvents: "all" }, "start")
 			.to(currentSlide.DOM.el, { yPercent: 0 }, "start")
 			.to(
 				[currentSlide.DOM.cards.left, currentSlide.DOM.cards.right],
@@ -79,7 +79,6 @@ export default class Slideshow {
 			)
 			.to([currentSlide.DOM.cards.center, currentSlide.DOM.cards.center.children[0]], { translateY: 0 }, "start")
 			.to(currentSlideInfo.DOM.text.title, { yPercent: 0, stagger: 0.025 }, "upcoming")
-
 			.set(".card--primary .card__inner", { overflow: "visible" })
 			.set(currentSlide.DOM.el, { pointerEvents: "all" });
 	}

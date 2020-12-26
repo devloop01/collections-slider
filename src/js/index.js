@@ -7,26 +7,34 @@ import Splitting from "splitting";
 
 import Slideshow from "./Slideshow";
 import Cursors from "./Cursors";
-import { colors } from "./utils";
+import { colors, preloadImages } from "./utils";
 
 Splitting();
 
-const slider = new Slideshow(document.querySelector(".slider"));
+let t = Date.now();
 
-Cursors.init();
-Cursors.initEventsOnSlider(slider);
+preloadImages(document.querySelectorAll(".card")).then(() => {
+	console.log(Date.now() - t);
 
-slider.onSlideChange((currentSlideIndex) => {
-	const color = colors[currentSlideIndex];
-	gsap.timeline({
-		delay: 1.25,
-		defaults: {
-			duration: 1.25,
-		},
-	})
-		.addLabel("start", 0)
-		.to("body", { backgroundColor: color.bgColor }, "start")
-		.to(".frame__logo", { color: color.logoColor }, "start")
-		.to(Cursors.cursors.large.DOM.el, { "--cursor-stroke": color.cursor }, "start")
-		.to(Cursors.cursors.small.DOM.el, { "--cursor-fill": color.cursor }, "start");
+	const slider = new Slideshow(document.querySelector(".slider"));
+
+	slider.initAnimation();
+
+	Cursors.init();
+	Cursors.initEventsOnSlider(slider);
+
+	slider.onSlideChange((currentSlideIndex) => {
+		const color = colors[currentSlideIndex];
+		gsap.timeline({
+			delay: 1.25,
+			defaults: {
+				duration: 1.25,
+			},
+		})
+			.addLabel("start", 0)
+			.to("body", { backgroundColor: color.bgColor }, "start")
+			.to(".frame__logo", { color: color.logoColor }, "start")
+			.to(Cursors.cursors.large.DOM.el, { "--cursor-stroke": color.cursor }, "start")
+			.to(Cursors.cursors.small.DOM.el, { "--cursor-fill": color.cursor }, "start");
+	});
 });
