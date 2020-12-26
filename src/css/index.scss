@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Elsie+Swash+Caps:wght@400;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Elsie:wght@400;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Red+Rose:wght@300;400;700&display=swap");
 
 :root {
 	--cursor-stroke-width: 1px;
@@ -8,6 +9,8 @@
 	--card-size-ratio: calc(3 / 3.8);
 	--card-height: 550px;
 	--card-width: calc(var(--card-size-ratio) * var(--card-height));
+
+	--bg: #cacaca;
 }
 
 *,
@@ -26,7 +29,7 @@ body {
 
 body {
 	overflow: hidden;
-	background: #cacaca;
+	background: var(--bg);
 }
 
 main {
@@ -171,6 +174,7 @@ a {
 		font-weight: 400;
 		overflow: hidden;
 		letter-spacing: -6px;
+		color: #f55786;
 
 		.word {
 			display: flex;
@@ -213,6 +217,10 @@ a {
 
 	> * {
 		pointer-events: auto;
+		overflow: hidden;
+		span {
+			display: block;
+		}
 	}
 
 	&__logo {
@@ -290,5 +298,50 @@ a {
 			stroke-width: 32px;
 			// mix-blend-mode: difference;
 		}
+	}
+}
+
+.loading__wrapper {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100vh;
+	z-index: 1000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.loading__text {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-size: 2vmin;
+		font-family: "Red Rose", sans-serif;
+		color: #fff;
+
+		&--inner {
+			animation: blink 1s infinite alternate-reverse;
+		}
+
+		@keyframes blink {
+			from {
+				opacity: 1;
+			}
+			to {
+				opacity: 0.55;
+			}
+		}
+	}
+
+	.bg__transition--slide {
+		background: #171717;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
 	}
 }
