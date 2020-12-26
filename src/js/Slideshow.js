@@ -28,12 +28,11 @@ export default class Slideshow {
 		this.slidesTotal = this.slides.length;
 
 		this.onSlideChangeCallbackFns = [];
-
-		this.init();
 	}
 
 	init() {
 		const currentSlide = this.slides[this.current];
+		const currentSlideInfo = this.slideInfos[this.current];
 
 		this.slides.forEach((slide, index) => {
 			if (currentSlide != slide) {
@@ -44,6 +43,14 @@ export default class Slideshow {
 			gsap.set(this.slideInfos[index].DOM.text.title, { color: colors[index].titleColor });
 		});
 
+		gsap.timeline()
+			.set([this.DOM.navigation.el], { opacity: 0, pointerEvents: "none" })
+			.set(currentSlide.DOM.el, { pointerEvents: "none" })
+			.set([currentSlide.DOM.cards.left, currentSlide.DOM.cards.right], { translateX: 0, rotate: 0, opacity: 0 })
+			.set(currentSlide.DOM.cards.center, { translateY: -currentSlide.DOM.cards.center.clientHeight * 1.15 })
+			.set(currentSlide.DOM.cards.center.children[0], { translateY: currentSlide.DOM.cards.center.clientHeight * 1.15 })
+			.set(currentSlideInfo.DOM.text.title, { yPercent: 120 });
+
 		this.initEvents();
 	}
 
@@ -53,21 +60,12 @@ export default class Slideshow {
 		const delay = 0.25;
 
 		const tl = gsap
-			.timeline({
-				defaults: { duration: 2, ease: "expo.inOut" },
-			})
+			.timeline({ defaults: { duration: 2, ease: "expo.inOut" } })
 			.addLabel("start", delay)
 			.addLabel("upcoming", delay + 0.85);
 
-		tl.set([this.DOM.navigation.el, ".frame > *"], { opacity: 0, pointerEvents: "none" })
-			.set(currentSlide.DOM.el, { pointerEvents: "none" })
-			.set([currentSlide.DOM.cards.left, currentSlide.DOM.cards.right], { translateX: 0, rotate: 0, opacity: 0 })
-			.set(currentSlide.DOM.cards.center, { translateY: -currentSlide.DOM.cards.center.clientHeight * 1.15 })
-			.set(currentSlide.DOM.cards.center.children[0], { translateY: currentSlide.DOM.cards.center.clientHeight * 1.15 })
-			.set(currentSlideInfo.DOM.text.title, { yPercent: 120 });
-
-		tl.to([this.DOM.navigation.el, ".frame > *"], { duration: 2, opacity: 1, pointerEvents: "all" }, "start")
-			.to(currentSlide.DOM.el, { yPercent: 0 }, "start")
+		tl.to(currentSlide.DOM.el, { yPercent: 0 }, "start")
+			.to([this.DOM.navigation.el], { opacity: 1, pointerEvents: "all" }, "upcoming")
 			.to(
 				[currentSlide.DOM.cards.left, currentSlide.DOM.cards.right],
 				{
