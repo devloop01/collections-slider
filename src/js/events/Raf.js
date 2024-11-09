@@ -2,21 +2,21 @@ import gsap from "gsap";
 import Events from "./Events";
 
 class Raf {
-	constructor() {
-		this.init();
-	}
+  constructor() {
+    this.init();
+  }
 
-	tick() {
-		Events.emit("tick");
-	}
+  tick() {
+    Events.emit("tick");
+  }
 
-	on() {
-		gsap.ticker.add(this.tick.bind(this));
-	}
+  on() {
+    gsap.ticker.add(this.tick.bind(this));
+  }
 
-	init() {
-		this.on();
-	}
+  init() {
+    this.on();
+  }
 }
 
 export default new Raf();

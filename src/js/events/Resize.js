@@ -1,21 +1,21 @@
 import Events from "./Events";
 
 class Resize {
-	constructor() {
-		this.init();
-	}
+  constructor() {
+    this.init();
+  }
 
-	onResize() {
-		Events.emit("resize");
-	}
+  onResize() {
+    Events.emit("resize");
+  }
 
-	on() {
-		window.addEventListener("resize", this.onResize);
-	}
+  on() {
+    window.addEventListener("resize", this.onResize);
+  }
 
-	init() {
-		this.on();
-	}
+  init() {
+    this.on();
+  }
 }
 
 export default new Resize();
